@@ -31,18 +31,21 @@ export const MyUserContextProvider = (props: Props) => {
     const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
     const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-    //쿼리
+    //쿼리 single -> maybeSingle
+    //single로 요청시 supabase에서 406에러 발생
+    //값이 없을 수도 있으므로 maybesingle이 나음
     const getUserDetails = () =>
         supabase.from('users')
-            .select('*');
-    // .single();
-    //쿼리
+            .select('*')
+            .maybeSingle();
+
+    //쿼리 single -> maybeSingle
     const getSubscription = () =>
         supabase
             .from('subscriptions')
             .select('*, prices(*, products(*))')
             .in('status', ['trialing', 'active'])
-    // .single();
+            .maybeSingle();
 
     useEffect(() => {
 
@@ -58,11 +61,11 @@ export const MyUserContextProvider = (props: Props) => {
 
                     //수정필요한 부분
                     if (userDetailsPromise.status === "fulfilled") {
-                        setUserDetails(userDetailsPromise.value.data[0] as UserDetails);
+                        setUserDetails(userDetailsPromise.value.data as UserDetails);
                     }
                     //수정필요한 부분
                     if (subscrptionPromise.status === "fulfilled") {
-                        setSubscription(subscrptionPromise.value.data[0] as Subscription);
+                        setSubscription(subscrptionPromise.value.data as Subscription);
                     }
 
                     setIsLoadingData(false)
