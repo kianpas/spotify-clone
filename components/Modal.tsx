@@ -9,6 +9,7 @@ interface ModalProps {
     children: React.ReactNode
 }
 
+//모달창 컴포넌트 Radix-ui 사용
 const Modal: React.FC<ModalProps> = ({ isOpen, onChange, title, description, children }) => {
     return (
         <Dialog.Root open={isOpen} defaultOpen={isOpen} onOpenChange={onChange}>

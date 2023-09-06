@@ -31,36 +31,36 @@ export const MyUserContextProvider = (props: Props) => {
     const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
     const [subscription, setSubscription] = useState<Subscription | null>(null);
 
+    //쿼리
     const getUserDetails = () =>
         supabase.from('users')
             .select('*');
-            // .single();
+    // .single();
+    //쿼리
     const getSubscription = () =>
         supabase
             .from('subscriptions')
             .select('*, prices(*, products(*))')
             .in('status', ['trialing', 'active'])
-            // .single();
+    // .single();
 
     useEffect(() => {
-        console.log(user);
-        console.log(isLoadingData);
-        console.log(userDetails);
+
         if (user && !isLoadingData && !userDetails && !subscription) {
             setIsLoadingData(true)
-            console.log(user);
+
             Promise.allSettled([getUserDetails(), getSubscription()]).then(
                 (result) => {
                     console.log(result);
 
-                    const userDetailsPromise = result[0]
+                    const userDetailsPromise = result[0];
                     const subscrptionPromise = result[1];
-                    console.log(result[0]);
-                    console.log(result[1]);
+
+                    //수정필요한 부분
                     if (userDetailsPromise.status === "fulfilled") {
                         setUserDetails(userDetailsPromise.value.data[0] as UserDetails);
                     }
-
+                    //수정필요한 부분
                     if (subscrptionPromise.status === "fulfilled") {
                         setSubscription(subscrptionPromise.value.data[0] as Subscription);
                     }
