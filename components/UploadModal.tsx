@@ -10,7 +10,7 @@ import Input from "./Input";
 import Button from "./Button";
 
 const UploadModal = () => {
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const uploadModal = useUploadModal();
 
